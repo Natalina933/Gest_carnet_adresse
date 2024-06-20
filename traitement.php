@@ -2,11 +2,19 @@
 include_once('dbConnect.php');
 
 // Connexion à la base de données
-$dbConnect = new DBConnect('localhost', 'gest_contact', 'root', '');
-$bdd = $dbConnect->getPDO();
+$bdd = dbConnect();
+if (!$bdd) {
+    die('Erreur de connexion à la base de données');
+}
 
-// Vérifie si les champs obligatoires (name, email, phone_number) sont remplis
-if (empty($_POST['name']) || empty($_POST['email']) || empty($_POST['phone_number'])) {
+// Vérifie si les champs obligatoires (titre, description, image) sont remplis, 
+// si la description a au moins 3 caractères et si l'URL de l'image est valide. 
+// Si une des conditions n'est pas remplie, la redirection vers la page 'test.php' est effectuée.
+if (
+    empty($_POST['name'])
+    || empty($_POST['email'])
+    || empty($_POST['phone_number'])
+) {
     header('Location: error.php?erreur=true');
     exit;
 } else {
@@ -16,7 +24,7 @@ if (empty($_POST['name']) || empty($_POST['email']) || empty($_POST['phone_numbe
     $phone_number = htmlspecialchars($_POST['phone_number']);
 
     try {
-        // Prépare et exécute une requête SQL pour insérer les données dans la table 'contact'.
+        // Prépare et exécute une requête SQL pour insérer les données dans la table 'contact'.     
         $req = $bdd->prepare('INSERT INTO contact (name, email, phone_number) VALUES (?, ?, ?)');
         $req->execute([$name, $email, $phone_number]);
 

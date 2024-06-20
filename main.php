@@ -1,6 +1,8 @@
 <?php
 // Inclusion de dbConnect.php pour obtenir l'objet PDO
-include_once('dbConnect.php');
+require_once 'dbConnect.php';
+require_once 'Contact.php';
+require_once 'ContactManager.php';
 
 try {
     $pdo = dbConnect(); // Appel à la fonction dbConnect qui retourne un objet PDO
@@ -20,9 +22,7 @@ try {
     } else {
         echo "Erreur de connexion à la base de données.";
     }
-
 } catch (PDOException $e) {
     echo 'Erreur de connexion : ' . $e->getMessage();
     // Gérer l'erreur de connexion à la base de données si nécessaire
 }
-?>

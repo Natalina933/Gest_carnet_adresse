@@ -15,16 +15,18 @@ class ContactManager
 
         try {
             $stmt = $this->pdo->query('SELECT id, name, email, phone_number FROM contact');
-            while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-                $contact = new Contact(
+            $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+            foreach ($rows as $row) {
+                $contacts[] = new Contact(
                     $row['id'],
                     $row['name'],
                     $row['email'],
                     $row['phone_number']
                 );
-                $contacts[] = $contact;
             }
         } catch (PDOException $e) {
+            // Gérer les erreurs de requête SQL
             echo 'Erreur d\'exécution de la requête : ' . $e->getMessage();
         }
 
@@ -49,6 +51,7 @@ class ContactManager
                 return null; // Aucun contact trouvé avec cet ID
             }
         } catch (PDOException $e) {
+            // Gérer les erreurs de requête SQL
             echo 'Erreur d\'exécution de la requête : ' . $e->getMessage();
             return null;
         }
@@ -60,6 +63,7 @@ class ContactManager
             $stmt = $this->pdo->prepare('INSERT INTO contact (name, email, phone_number) VALUES (?, ?, ?)');
             return $stmt->execute([$name, $email, $phone_number]);
         } catch (PDOException $e) {
+            // Gérer les erreurs d'insertion
             echo 'Erreur d\'exécution de la requête : ' . $e->getMessage();
             return false;
         }
@@ -76,6 +80,7 @@ class ContactManager
                 $contact->getId()
             ]);
         } catch (PDOException $e) {
+            // Gérer les erreurs de mise à jour
             echo 'Erreur d\'exécution de la requête : ' . $e->getMessage();
             return false;
         }
@@ -87,10 +92,9 @@ class ContactManager
             $stmt = $this->pdo->prepare('DELETE FROM contact WHERE id = ?');
             return $stmt->execute([$id]);
         } catch (PDOException $e) {
+            // Gérer les erreurs de suppression
             echo 'Erreur d\'exécution de la requête : ' . $e->getMessage();
             return false;
         }
     }
 }
-
-?>

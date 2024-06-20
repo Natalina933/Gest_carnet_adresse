@@ -55,5 +55,4 @@ class Contact
         return "ID: {$this->id}, Name: {$this->name}, Email: {$this->email}, Phone Number: {$this->phone_number}";
     }
 }
-
 ?>
